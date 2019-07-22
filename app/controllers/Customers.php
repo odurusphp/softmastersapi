@@ -39,7 +39,7 @@ class Customers extends Controller
         $lastname = $customerdata->lastname;
         $othernameas = $customerdata->middelname;
         $gender = $customerdata->gender;
-        $dob = $customerdata->dob;
+        $dob = $customerdata->dateofbirth;
         $placeofbirth = $customerdata->placeofbirth;
         $age = $customerdata->age;
         $nationality = $customerdata->nationality;
