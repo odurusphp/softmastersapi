@@ -45,6 +45,7 @@ class Customers extends Controller
         $nationality = $customerdata->nationality;
         $email = $customerdata->email;
 
+
         $storenumber = $customerdata->storenumber;
         $natureoftrade = $customerdata->natureoftrade;
         $ownershiptype = $customerdata->occupancy;
@@ -52,7 +53,7 @@ class Customers extends Controller
 
          $basicdata = ['firstname'=>$firstname, 'lastname'=>$lastname, 'othernames'=>$othernameas,
                        'gender'=>$gender, 'dob'=>$dob, 'placeofbirth'=>$placeofbirth, 'age'=>$age,
-                       'nationality'=>$nationality, 'email'=>$email];
+                       'nationality'=>$nationality, 'email'=>$email, 'telephone'=>$telephone];
 
          $storedata  = ['storenumber'=>$storenumber, 'natureoftrade'=>$natureoftrade,
                         'occupancytype'=>$ownershiptype ];
