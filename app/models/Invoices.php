@@ -49,7 +49,8 @@ class Invoices extends tableDataObject{
         return $connectedDb->resultSet();
     }
 
-    public static  function getCountInvoicebyParameter($parameter){
+    public static  function getCountInvoicebyParameter($parameter)
+    {
         global $connectedDb;
 
         $getrecords = "SELECT count(*) as ct FROM invoices INNER JOIN customers ON
@@ -57,11 +58,38 @@ class Invoices extends tableDataObject{
                         OR invoices.invoicecode   = '$parameter' OR customers.telephone = '$parameter' ";
         $connectedDb->prepare($getrecords);
         return $connectedDb->fetchColumn();
+
+    }
+
+
+    public static  function getInvoicebyCode($invoicecode)
+    {
+        global $connectedDb;
+        $getrecords = "SELECT invoiceid from invoices where invoicecode = '$invoicecode' ";
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->fetchColumn();
+
+    }
+
+
+    public static  function getInvoiceCodeCount($invoicecode)
+    {
+        global $connectedDb;
+        $getrecords = "SELECT count(*)  as ct  from invoices where invoicecode = '$invoicecode' ";
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->fetchColumn();
+
     }
 
 
 
- }
+
+
+
+
+
+
+}
 
 
 

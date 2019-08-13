@@ -22,6 +22,11 @@ class Pay extends PostController
         $transactioncode = isset($_POST['transactioncode']) ? $_POST['transactioncode'] : '';
         $telephone = isset($_POST['telephone']) ? $_POST['telephone'] : '';
 
+        $invcount = Invoices::getInvoiceCodeCount($invoiceid);
+        if($invcount  == 0){
+            $rs->throwErrror('INV_404', 'Invoice ID does not exist', 'Invoice ID');
+        }
+
         $postfields = (array_keys($_POST));
 
         //Validating the fieldnames in the method
@@ -36,12 +41,15 @@ class Pay extends PostController
         //Verifying Token
         $rs->verifyToken($token);
 
+        $invid = Invoices::getInvoicebyCode($invoiceid);
+
         $py  = new Payments();
-        $py->recordObject->invoiceid = $invoiceid;
+        $py->recordObject->invoiceid = $invid;
         $py->recordObject->amount = $amount;
         $py->recordObject->telephone = $telephone;
         $py->recordObject->transactioncode = $transactioncode;
         $py->recordObject->paymentdate = $paymentdate;
+        $py->recordObject->invoicecode = $invoiceid;
 
         if($py->store()){
             $data =  ['message'=> 'Payment Data Received'];
