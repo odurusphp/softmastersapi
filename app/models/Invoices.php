@@ -6,36 +6,57 @@ class Invoices extends tableDataObject{
     const TABLENAME = 'invoices';
 
     public static  function getInvoices($invoiceid){
-        global $payrolldb;
+        global  $connectedDb;
 
         $getrecords = "SELECT invoices.*, customers.* FROM invoices INNER JOIN customers
                         ON invoices.cid  = customers.cid  WHERE invoiceid = '$invoiceid'";
-        $payrolldb->prepare($getrecords);
-        return $payrolldb->singleRecord();
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->singleRecord();
     }
 
     public static  function getInvoicesbycid($cid){
-        global $payrolldb;
+        global $connectedDb;
 
         $getrecords = "SELECT * from invoices where cid = $cid";
-        $payrolldb->prepare($getrecords);
-        return $payrolldb->resultSet();
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->resultSet();
     }
 
     public static  function gettotalAmountBycid($cid){
-        global $payrolldb;
+        global $connectedDb;
 
         $getrecords = "SELECT sum(amount) as total from invoices where cid = $cid";
-        $payrolldb->prepare($getrecords);
-        return $payrolldb->fetchColumn();
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->fetchColumn();
     }
 
     public static  function gettotalAmountByInvoiceId($invoiceid){
-        global $payrolldb;
+        global $connectedDb;
 
         $getrecords = "SELECT sum(amount) as total from invoices where invoiceid = $invoiceid ";
-        $payrolldb->prepare($getrecords);
-        return $payrolldb->fetchColumn();
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->fetchColumn();
+    }
+
+
+    public static  function getInvoicebyParameter($parameter){
+        global $connectedDb;
+
+        $getrecords = "SELECT invoices.*, customers.* FROM invoices INNER JOIN customers ON
+                        invoices.cid = customers.cid WHERE invoices.storenumber = '$parameter'
+                        OR invoices.invoicecode   = '$parameter' OR customers.telephone = '$parameter' ";
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->resultSet();
+    }
+
+    public static  function getCountInvoicebyParameter($parameter){
+        global $connectedDb;
+
+        $getrecords = "SELECT count(*) as ct FROM invoices INNER JOIN customers ON
+                        invoices.cid = customers.cid WHERE invoices.storenumber = '$parameter'
+                        OR invoices.invoicecode   = '$parameter' OR customers.telephone = '$parameter' ";
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->fetchColumn();
     }
 
 
