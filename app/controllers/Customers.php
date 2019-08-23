@@ -37,7 +37,7 @@ class Customers extends Controller
         $cid = $customerdata->cid;
         $firstname = $customerdata->firstname;
         $lastname = $customerdata->lastname;
-        $othernameas = $customerdata->middelname;
+        $othernameas = $customerdata->middlename;
         $gender = $customerdata->gender;
         $dob = $customerdata->dateofbirth;
         $placeofbirth = $customerdata->placeofbirth;
@@ -69,13 +69,13 @@ class Customers extends Controller
          $identitydata = ['idtype'=>$idtype, 'idnumber'=>$idnumber, 'dateofissue'=>$dateofissue];
 
          $loc = Location::getcustomersLocation($cid);
-         $latitude = $loc->latitude;
-         $longitude = $loc->longitude;
-         $city = $loc->city;
-         $region = $loc->region;
-         $streetnumber = $loc->street;
-         $housenumber = $loc->housenumber;
-         $popularname = $loc->popularname;
+         $latitude = isset($loc->latitude) ? $loc->latitude : '';
+         $longitude = isset($loc->longitude) ? $loc->longitude : '';
+         $city = isset($loc->city) ? $loc->city: '';
+         $region = isset($loc->region) ? $loc->region : '';
+         $streetnumber = isset($loc->street) ? $loc->street : '';
+         $housenumber = isset($loc->housenumber) ? $loc->housenumber : '';
+         $popularname =isset($loc->popularname) ? $loc->popularname : '';
 
          $locationdata = ['latitude'=>$latitude, 'longitude'=>$longitude, 'city'=>$city, 'region'=>$region,
                           'streetnumber'=>$streetnumber, 'popularname'=>$popularname,
