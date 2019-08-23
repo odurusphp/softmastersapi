@@ -365,10 +365,21 @@ class Customer extends tableDataObject{
 
     public static function getapprovedCustomers($cid){
 
+    global $connectedDb;
+    $getrecords = "SELECT count(*) as ct  FROM approvedcustomers WHERE  cid = $cid and status = 1 ";
+    $connectedDb->prepare($getrecords);
+    return $connectedDb->fetchColumn();
+
+   }
+
+
+
+    public static function getallocatedCustomers($cid){
         global $connectedDb;
-        $getrecords = "SELECT count(*) as ct  FROM approvedcustomers WHERE  cid = $cid and status = 1 ";
+        $getrecords = "SELECT * from approvedcustomers inner join storenumbers on 
+                       approvedcustomers.cid = storenumbers.cid where  approvedcustomers.cid = $cid ";
         $connectedDb->prepare($getrecords);
-        return $connectedDb->fetchColumn();
+        return $connectedDb->singleRecord();
 
     }
 

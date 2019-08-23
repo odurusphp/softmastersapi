@@ -47,9 +47,13 @@ class Customers extends Controller
         $tin = $customerdata->tin;
 
 
-        $storenumber = $customerdata->storenumber;
-        $natureoftrade = $customerdata->natureoftrade;
+        $storenumber = $customerdata->shopnumber;
+        //$natureoftrade = $customerdata->natureoftrade;
         $ownershiptype = $customerdata->occupancy;
+
+         $st =  Customer::getallocatedCustomers($cid);
+         $shopnumber = $st->shopnumber;
+         $natureoftrade = $st->natureoftrade;
 
 
          $basicdata = ['firstname'=>$firstname, 'lastname'=>$lastname, 'othernames'=>$othernameas,
@@ -57,9 +61,8 @@ class Customers extends Controller
                        'nationality'=>$nationality, 'email'=>$email, 'telephone'=>$telephone,
                        'tin'=>$tin ];
 
-         $storedata  = ['storenumber'=>$storenumber, 'natureoftrade'=>$natureoftrade,
+         $storedata  = ['storenumber'=>$shopnumber, 'natureoftrade'=>$natureoftrade,
                         'occupancytype'=>$ownershiptype ];
-
 
          $iddata = Idcard::getidcardbystaffid($staffid);
          $idtype = $iddata->type;
