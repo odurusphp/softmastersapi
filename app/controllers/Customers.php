@@ -47,7 +47,7 @@ class Customers extends Controller
         $tin = $customerdata->tin;
 
 
-        $storenumber = $customerdata->shopnumber;
+        //$storenumber = $customerdata->shopnumber;
         //$natureoftrade = $customerdata->natureoftrade;
         $ownershiptype = $customerdata->occupancy;
 
