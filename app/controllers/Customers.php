@@ -49,11 +49,11 @@ class Customers extends Controller
 
         //$storenumber = $customerdata->shopnumber;
         //$natureoftrade = $customerdata->natureoftrade;
-        $ownershiptype = $customerdata->occupancy;
+         $ownershiptype = $customerdata->occupancy;
 
          $st =  Customer::getallocatedCustomers($cid);
-         $shopnumber = $st->shopnumber;
-         $natureoftrade = $st->natureoftrade;
+         $shopnumber = isset($st->shopnumber) ? $st->shopnumber : '';
+         $natureoftrade = isset($st->natureoftrade) ? $st->natureoftrade : '';
 
 
          $basicdata = ['firstname'=>$firstname, 'lastname'=>$lastname, 'othernames'=>$othernameas,
