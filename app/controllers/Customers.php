@@ -65,9 +65,9 @@ class Customers extends Controller
                         'occupancytype'=>$ownershiptype ];
 
          $iddata = Idcard::getidcardbystaffid($staffid);
-         $idtype = $iddata->type;
-         $idnumber = $iddata->idnumber;
-         $dateofissue = $iddata->dateofissue;
+         $idtype = isset($iddata->type) ? $iddata->type : '';
+         $idnumber = isset($iddata->idnumber) ? $iddata->idnumber : '' ;
+         $dateofissue = isset($iddata->dateofissue) ? $iddata->dateofissue : '' ;
 
          $identitydata = ['idtype'=>$idtype, 'idnumber'=>$idnumber, 'dateofissue'=>$dateofissue];
 
