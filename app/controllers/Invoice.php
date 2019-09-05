@@ -40,6 +40,7 @@ class Invoice extends Controller
 
              $customername = $get->firstname. ' '.$get->lastname;
              $shopnumber = $get->storenumber;
+             $telephone = $get->telephone;
              $stdata = Storenumbers::getStoreDetailsbyStoreNumber($shopnumber);
              $location = isset($stdata) ? $stdata->floor : '';
              $description = $get->description;
@@ -51,7 +52,8 @@ class Invoice extends Controller
 
              $responsedata[] = ['invoiceID'=>$invoicecode, 'customerName'=>$customername,
                                 'shopNumber'=>$shopnumber, 'location'=>$location,
-                                'description'=>$description, 'amountDue'=>$amount
+                                'description'=>$description, 'amountDue'=>$amount,
+                                 'telephone'=>$telephone
                                 ];
 
          }

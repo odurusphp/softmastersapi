@@ -42,7 +42,7 @@ class Invoices extends tableDataObject{
     public static  function getInvoicebyParameter($parameter){
         global $connectedDb;
 
-        $getrecords = "SELECT invoices.*, customers.firstname, customers.lastname FROM invoices INNER JOIN customers ON
+        $getrecords = "SELECT invoices.*, customers.firstname, customers.lastname, customers.telephone FROM invoices INNER JOIN customers ON
                         invoices.cid = customers.cid WHERE invoices.storenumber = '$parameter'
                         OR invoices.invoicecode   = '$parameter' OR customers.telephone = '$parameter' ";
         $connectedDb->prepare($getrecords);
