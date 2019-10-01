@@ -113,12 +113,12 @@ class Customers extends Controller
 
         $rs = new RestApi();
 
-        // Verify Apikey
-        //$rs->getApikey();
+         //Verify Apikey
+        $rs->getApikey();
         //Getting Authorization token
-        //$token = $rs->getBearerToken();
+        $token = $rs->getBearerToken();
         //Verifying Token
-        //$rs->verifyToken($token);
+        $rs->verifyToken($token);
 
         $url = parse_url($_SERVER['REQUEST_URI']);
 
