@@ -9,6 +9,9 @@
 class Customers extends Controller
 {
 
+
+
+
     public function index($telephone){
 
         $rs = new RestApi();
@@ -16,6 +19,8 @@ class Customers extends Controller
         if($telephone == ''){
             $rs->throwErrror('TEL_101', 'Telephone', 'Telephone');
         }
+
+
 
         $usercount = Customer::getcustomerscountbyTelephone($telephone);
         if($usercount == 0){
@@ -102,6 +107,60 @@ class Customers extends Controller
         $rs->returnResponse($responsedata);
 
     }
+
+
+    public function search(){
+
+        $rs = new RestApi();
+
+        // Verify Apikey
+        //$rs->getApikey();
+        //Getting Authorization token
+        //$token = $rs->getBearerToken();
+        //Verifying Token
+        //$rs->verifyToken($token);
+
+        $url = parse_url($_SERVER['REQUEST_URI']);
+
+        if(isset($url['query'])) {
+            parse_str($url['query'], $parameters);
+            $page = isset($parameters['page']) ? $parameters['page'] : 1;
+            $limit = isset($parameters['limit']) ? $parameters['limit'] : 20  ;
+        }else{
+            $page = 1;
+            $limit = 20;
+        }
+
+        $cusdata = Storenumbers::searhallocated($page, $limit);
+
+        $data = [];
+
+        foreach($cusdata as $key=>$get){
+            $storenumber = $get->shopnumber;
+            $customername = $get->firstname.' '.$get->lastname;
+            $telephone = $get->telephone;
+            $invdata = Invoices::getInvoicebyStoreNumber($storenumber);
+            $invoiceamount = isset($invdata->amount) ? $invdata->amount : '';
+            $invoicecode  = isset($invdata->invoicecode) ? $invdata->invoicecode : '';
+            $invoicedate = isset($invdata->invoicedate) ? $invdata->invoicedate : '';
+
+            $amountpaid =Invoices::getPaymentbyStoreNumber($storenumber);
+
+            $data [] = ['name'=>$customername, 'telephone'=>$telephone, 'storenumber'=>$storenumber,
+                        'invoiceamount'=>$invoiceamount, 'invoicecode'=>$invoicecode, 'invoicedate'=>$invoicedate,
+                         'amountpaid'=>$amountpaid
+                        ];
+
+
+        }
+
+        $rs->returnResponse($data);
+
+
+
+
+    }
+
 
 
 

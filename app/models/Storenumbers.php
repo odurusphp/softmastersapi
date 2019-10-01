@@ -67,5 +67,17 @@ class Storenumbers extends tableDataObject
         return $connectedDb->resultSet();
     }
 
+    public static  function searhallocated($page, $limit){
+        global $connectedDb;
+        $getrecords = "SELECT customers.firstname, customers.lastname, customers.telephone, customers.staffid, 
+                       storenumbers.shopnumber, storenumbers.grossarea, storenumbers.natureoftrade,
+                       storenumbers.storetype FROM storenumbers INNER JOIN customers
+                       ON storenumbers.cid = customers.cid  limit $page, $limit";
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->resultSet();
+    }
+
+
+
 
 }
