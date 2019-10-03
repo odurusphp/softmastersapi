@@ -11,10 +11,10 @@ class Pay extends PostController
 
     public function makepayment(){
 
-
         $rs = new RestApi();
 
-        $requiredfieldnames = ['telephone', 'invoiceid', 'amount', 'transactioncode', 'paymentdate', 'storenumber'];
+        $requiredfieldnames = ['telephone', 'invoiceid', 'amount', 'transactioncode',
+                                'paymentdate', 'storenumber', 'payeename', 'payeetelephone'];
 
         $paymentdate= isset($_POST['paymentdate']) ? $_POST['paymentdate'] : '';
         $invoiceid = isset($_POST['invoiceid']) ? $_POST['invoiceid'] : '';
@@ -22,6 +22,8 @@ class Pay extends PostController
         $transactioncode = isset($_POST['transactioncode']) ? $_POST['transactioncode'] : '';
         $telephone = isset($_POST['telephone']) ? $_POST['telephone'] : '';
         $storenumber = isset($_POST['storenumber']) ? $_POST['storenumber'] : '';
+        $payeename = isset($_POST['payesname']) ? $_POST['payeename'] : '';
+        $payeetelephone = isset($_POST['payeetelephone']) ? $_POST['payeetelephone'] : '';
 
         $invcount = Invoices::getInvoiceCodeCount($invoiceid);
         if($invcount  == 0){
@@ -55,6 +57,8 @@ class Pay extends PostController
         $py->recordObject->storenumber = $storenumber;
         $py->recordObject->description = 'Rent Premium';
         $py->recordObject->status = 10;
+        $py->recordObject->payeetelephone = $payeetelephone;
+        $py->recordObject->payeename = $payeename;
 
         if($py->store()){
             $data =  ['message'=> 'Payment Data Received'];
@@ -65,9 +69,7 @@ class Pay extends PostController
 
     public function reversal(){
 
-
         $rs = new RestApi();
-
         $requiredfieldnames = ['telephone', 'amount', 'transactioncode', 'reversaldate', 'storenumber'];
         $reversaldate  = isset($_POST['reversaldate']) ? $_POST['reversaldate'] : '';
         $amount = isset($_POST['amount']) ? $_POST['amount'] : '';
