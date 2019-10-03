@@ -62,4 +62,46 @@ class Pay extends PostController
         }
 
     }
+
+    public function reversal(){
+
+
+        $rs = new RestApi();
+
+        $requiredfieldnames = ['telephone', 'amount', 'transactioncode', 'reversaldate', 'storenumber'];
+        $reversaldate  = isset($_POST['reversaldate']) ? $_POST['reversaldate'] : '';
+        $amount = isset($_POST['amount']) ? $_POST['amount'] : '';
+        $transactioncode = isset($_POST['transactioncode']) ? $_POST['transactioncode'] : '';
+        $telephone = isset($_POST['telephone']) ? $_POST['telephone'] : '';
+        $storenumber = isset($_POST['storenumber']) ? $_POST['storenumber'] : '';
+        $postfields = (array_keys($_POST));
+
+        //Validating the fieldnames in the method
+        $rs->validateFieldNames($requiredfieldnames, $postfields);
+
+        // Verify Apikey
+        $apikey = $rs->getApikey();
+
+        //Getting Authorization token
+        $token = $rs->getBearerToken();
+
+        //Verifying Token
+        $rs->verifyToken($token);
+
+        $py  = new Payments();
+        $py->recordObject->invoiceid = null;
+        $py->recordObject->amount = $amount;
+        $py->recordObject->telephone = $telephone;
+        $py->recordObject->transactioncode = $transactioncode;
+        $py->recordObject->paymentdate = $reversaldate;
+        $py->recordObject->storenumber = $storenumber;
+        $py->recordObject->description = 'Reversal';
+        $py->recordObject->status = 10;
+
+        if($py->store()){
+            $data =  ['message'=> 'Reversal xuccessfully done'];
+            $rs->returnResponse($data);
+        }
+
+    }
 }
