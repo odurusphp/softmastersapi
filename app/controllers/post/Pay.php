@@ -14,7 +14,7 @@ class Pay extends PostController
         $rs = new RestApi();
 
         $requiredfieldnames = ['telephone', 'invoiceid', 'amount', 'transactioncode',
-                                'paymentdate', 'storenumber', 'payeename', 'payeetelephone'];
+                                'paymentdate', 'storenumber', 'payeename', 'payeetelephone', 'payment_type'];
 
         $paymentdate= isset($_POST['paymentdate']) ? $_POST['paymentdate'] : '';
         $invoiceid = isset($_POST['invoiceid']) ? $_POST['invoiceid'] : '';
@@ -24,6 +24,7 @@ class Pay extends PostController
         $storenumber = isset($_POST['storenumber']) ? $_POST['storenumber'] : '';
         $payeename = isset($_POST['payesname']) ? $_POST['payeename'] : '';
         $payeetelephone = isset($_POST['payeetelephone']) ? $_POST['payeetelephone'] : '';
+        $payment_type = isset($_POST['payment_type']) ? $_POST['payment_type'] : '';
 
         $invcount = Invoices::getInvoiceCodeCount($invoiceid);
         if($invcount  == 0){
@@ -55,7 +56,7 @@ class Pay extends PostController
         $py->recordObject->paymentdate = $paymentdate;
         $py->recordObject->invoicecode = $invoiceid;
         $py->recordObject->storenumber = $storenumber;
-        $py->recordObject->description = 'Rent Premium';
+        $py->recordObject->description = $payment_type;
         $py->recordObject->status = 10;
         $py->recordObject->payeetelephone = $payeetelephone;
         $py->recordObject->payeename = $payeename;
