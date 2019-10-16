@@ -18,6 +18,14 @@ class Payments extends tableDataObject
         return $connectedDb->fetchColumn();
     }
 
+    public static  function getpaymentByStorenumber($storenumber){
+        global $connectedDb;
+        $getrecords = "SELECT  sum(amount) as amt  FROM  payments  WHERE storenumber = $storenumber ";
+        $connectedDb->prepare($getrecords);
+        $connectedDb->execute();
+        return $connectedDb->fetchColumn();
+    }
+
 
 
 

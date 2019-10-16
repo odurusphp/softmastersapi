@@ -46,7 +46,8 @@ class Invoice extends Controller
              $description = $get->description;
              $invoiceamount  =  $get->amount;
              $invoiceid = $get->invoiceid;
-             $paidamount = Payments::getpaymentByInvoiceID($invoiceid);
+             //$paidamount = Payments::getpaymentByInvoiceID($invoiceid);
+             $paidamount = Payments::getpaymentByStorenumber($shopnumber);
              $amount = $invoiceamount - $paidamount;
              $invoicecode =  $get->invoicecode;
 
