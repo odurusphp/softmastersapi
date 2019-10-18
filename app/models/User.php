@@ -13,46 +13,77 @@ class User extends tableDataObject{
     }
 
     public static  function getUsers(){
-        global $payrolldb;
+        global $connectedDb;
         $getrecords = "select * from users ";
 
-         $payrolldb->prepare($getrecords);
-         $payrolldb->execute();
-        return $payrolldb->resultSet();
+        $connectedDb->prepare($getrecords);
+        $connectedDb->execute();
+        return $connectedDb->resultSet();
     }
 
     public static function checkUserExist($email){
-      global $payrolldb;
-  		$getusercount = "select count(*) as usercount from users where username  = '$email'  ";
-  		$payrolldb->prepare($getusercount);
-  		$usercount = $payrolldb->fetchColumn();
-  		return $usercount;
-	 }
+        global $connectedDb;
+        $getusercount = "select count(*) as usercount from users where username  = '$email'  ";
+        $connectedDb->prepare($getusercount);
+        $usercount = $connectedDb->fetchColumn();
+        return $usercount;
+    }
 
-   public static function userlogin($email, $password){
-     global $payrolldb;
-     $getusercount = "select count(*) as usercount from users where username  = '$email' and password = '$password'  ";
-     $payrolldb->prepare($getusercount);
-     $usercount = $payrolldb->fetchColumn();
-     return $usercount;
-  }
+    public static function userlogin($email, $password){
+        global $connectedDb;
+        $getusercount = "select count(*) as usercount from users where username  = '$email' and password = '$password'  ";
+        $connectedDb->prepare($getusercount);
+        $usercount = $connectedDb->fetchColumn();
+        return $usercount;
+    }
 
-  public static function userinfo($email){
-    global $payrolldb;
-    $getusercount = "select * from users where username  = '$email' ";
-     $payrolldb->prepare($getusercount);
-     return $payrolldb->singleRecord();
+    public static function userinfo($email){
+        global $connectedDb;
+        $getusercount = "select * from users where username  = '$email' ";
+        $connectedDb->prepare($getusercount);
+        return $connectedDb->singleRecord();
 
- }
+    }
 
 
     public static function deleteuserbyEmail($email){
-        global $payrolldb;
+        global $connectedDb;
         $getusercount = "delete from  users where username  = '$email' ";
-        $payrolldb->prepare($getusercount);
-        $payrolldb->execute();
+        $connectedDb->prepare($getusercount);
+        $connectedDb->execute();
 
     }
+
+    public static function getUserCountByEmail($email){
+        global $connectedDb;
+        $getusercount = "SELECT count(*) as ct  from  users where username  = '$email' ";
+        $connectedDb->prepare($getusercount);
+        return $connectedDb->fetchColumn();
+
+    }
+
+    public static function userIdByEmail($email){
+        global $connectedDb;
+        $getusercount = "SELECT uid  from  users where username  = '$email' ";
+        $connectedDb->prepare($getusercount);
+        return $connectedDb->fetchColumn();
+    }
+
+    public static function checkUserCredentials($username, $password) {
+        global $connectedDb;
+        $password = self::encryptPassword($password);
+        $getusercount = "SELECT count(*) as ct  from  users where 
+                         username  = '$username' and password = '$password' ";
+        $connectedDb->prepare($getusercount);
+        return $connectedDb->fetchColumn();
+
+    }
+
+
+
+
+
+
 
 
 

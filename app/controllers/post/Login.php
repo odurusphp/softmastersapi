@@ -2,22 +2,21 @@
 /**
  * Created by PhpStorm.
  * User: oduru
- * Date: 6/21/2019
- * Time: 8:47 AM
+ * Date: 10/14/2019
+ * Time: 1:32 PM
  */
 
-class Login extends  PostController
+class Login extends PostController
 {
 
     public function index(){
 
         $rs = new RestApi();
 
+        $requiredfieldnames = ['username', 'password'];
 
-        $requiredfieldnames = ['email', 'password'];
-
-        $email = isset($_POST['email']) ? $_POST['email'] : '';
-        $password = isset($_POST['password']) ? $_POST['password'] : '';
+        $username = isset($_POST['username']) ? trim($_POST['username']) : '';
+        $password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
         $postfields = (array_keys($_POST));
 
@@ -28,67 +27,29 @@ class Login extends  PostController
         $apikey = $rs->getApikey();
 
         //Check email
-        $emailcount = User::getUserCountByEmail($email);
+        $emailcount = User::getUserCountByEmail($username);
         if ($emailcount == 0) {
-            $rs->throwErrror('USR_04', USR_04, 'email');
+            $rs->throwErrror('USR_05', USR_05, 'username');
         }
 
         //Check user credential
-        $usercount = User::checkUserCredentials($email, $password);
+        $usercount = User::checkUserCredentials($username, $password);
         if ($usercount == 0) {
-            $rs->throwErrror('USR_01', USR_01, 'email, password');
+            $rs->throwErrror('USR_01', USR_01, 'username , password');
         }
 
-        $uid = User::userIdByEmail($email);
-
-        $roleid = User::getrolebyUserId($uid);
-
-        $role = User::getRolebyRoleId($roleid);
-
-        if($role == 'Individual'){
-
-            $bid = User::getBasicUserId($uid);
-
-            $bas  = new Basic($bid);
-            $userdata = $bas->recordObject;
-            $applicantid = $bas->recordObject->applicantid;
-
-            //Generate token
-            $jwt = new JwtToken();
-            $tokenresposnse = $jwt->generateToken($apikey);
+        $uid = User::userIdByEmail($username);
+        $us = new User($uid);
+        $userdata = $us->recordObject;
 
 
-            //Get sms verification time
-            $vf = Smslog::getverifiedAt($applicantid);
-            $verifiedat = $vf->verified_at;
+        //Generate token
+        $jwt = new JwtToken();
+        $tokenresposnse = $jwt->generateToken($apikey);
 
-            $rs->returnResponse( ['basicInfo'=>$userdata, 'tokenInfo'=>$tokenresposnse, 'verified_at'=>$verifiedat ] );
-
-        }elseif($role == 'Business'){
-            $busid = User::getBusinessUserId($uid);
-
-            $bus = new Business($busid);
-            $businessdata = $bus->recordObject;
-            $businessuid = $bus->recordObject->businessuid;
-
-            //Generate token
-            $jwt = new JwtToken();
-            $tokenresposnse = $jwt->generateToken($apikey);
-
-            //Get sms verification time
-            $vf = Smslog::getverifiedAt($businessuid);
-            $verifiedat = $vf->verified_at;
-
-            $rs->returnResponse( ['businessInfo'=>$businessdata, 'tokenInfo'=>$tokenresposnse, 'verified_at'=>$verifiedat ] );
-
-        }
-
-
-
-
-
-
+        $rs->returnResponse(['tokenInfo'=> $tokenresposnse, 'userdata'=>$userdata]);
 
     }
+
 
 }

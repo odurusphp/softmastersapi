@@ -107,4 +107,47 @@ class Pay extends PostController
         }
 
     }
+
+
+    public function transportcollection(){
+
+        $rs = new RestApi();
+        $requiredfieldnames = ['regnumber', 'type', 'telephone', 'amount', 'currency', 'userid'];
+        $regnumber  = isset($_POST['regnumber']) ? $_POST['regnumber'] : '';
+        $amount = isset($_POST['amount']) ? $_POST['amount'] : '';
+        $type = isset($_POST['type']) ? $_POST['type'] : '';
+        $telephone = isset($_POST['telephone']) ? $_POST['telephone'] : '';
+        $currency = isset($_POST['currency']) ? $_POST['currency'] : '';
+        $userid  = isset($_POST['userid']) ? $_POST['userid'] : '';
+        $postfields = (array_keys($_POST));
+
+        //Validating the fieldnames in the method
+        $rs->validateFieldNames($requiredfieldnames, $postfields);
+
+        // Verify Apikey
+        $rs->getApikey();
+
+        //Getting Authorization token
+        $token = $rs->getBearerToken();
+
+        //Verifying Token
+        $rs->verifyToken($token);
+
+        $py  = new Vehicle();
+        $py->recordObject->regnumber = $regnumber;
+        $py->recordObject->amount = $amount;
+        $py->recordObject->telephone = $telephone;
+        $py->recordObject->type = $type;
+        $py->recordObject->currency = $currency;
+        $py->recordObject->dateprocessed = date('Y-m-d H:i:s');
+        $py->recordObject->userid = $userid;
+
+        if($py->store()){
+            $vid = $py->recordObject->vid;
+            $vh  = new Vehicle($vid);
+            $data = $vh->recordObject;
+            $rs->returnResponse($data);
+        }
+
+    }
 }
