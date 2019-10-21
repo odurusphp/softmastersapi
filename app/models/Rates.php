@@ -7,11 +7,11 @@ class Rates extends tableDataObject{
 
 
         public static  function getratebyStoreType($storetype){
-            global $payrolldb;
+            global $connectedDb;
             $getrecords = "SELECT *  FROM rates  WHERE storetype  =  '$storetype'  ";
-            $payrolldb->prepare($getrecords);
-            $payrolldb->execute();
-            return $payrolldb->singleRecord();
+            $connectedDb->prepare($getrecords);
+            $connectedDb->execute();
+            return $connectedDb->singleRecord();
         }
 
   }

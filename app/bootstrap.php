@@ -7,6 +7,10 @@ require_once 'config/config_env.php';
 // Load everything we require via composer
 require('../vendor/autoload.php');
 
+//helper functions
+require_once 'helpers/general_helper.php';
+require_once 'helpers/email_helper.php';
+
 /*
  * Autoload Core Libraries
  *

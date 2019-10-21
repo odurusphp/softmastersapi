@@ -17,8 +17,10 @@ class Invoice extends Controller
             $rs->throwErrror('PARAM_101', 'Search parameter cannot be null', 'Parameter');
         }
 
+        $storecount = Storenumbers::getStoreCountByShopNumber($parameter);
         $invoicecount = Invoices::getCountInvoicebyParameter($parameter);
-        if($invoicecount == 0){
+
+        if($invoicecount == 0 && $storecount == 0){
             $rs->throwErrror('PARAM_404', 'Search parameter does not exist', 'Parameter');
         }
 
@@ -31,8 +33,31 @@ class Invoice extends Controller
         //Verifying Token
         $rs->verifyToken($token);
 
+
         //Get applicant details
-        $invoicedata  = Invoices::getInvoicebyParameter($parameter);
+        if($invoicecount > 0) {
+            $invoicedata = Invoices::getInvoicebyParameter($parameter);
+        }else {
+            $storedata = Storenumbers::getStoreDetailsbyStoreNumber($parameter);
+            $storetype = $storedata->storetype;
+            $rates = Rates::getratebyStoreType($storetype);
+            $premium = premiumCalculation($rates->premiumrent);
+
+            $invoicedata =[(object)[
+                "firstname" => "",
+                "lastname" => '',
+                "telephone" => '',
+                "storenumber"=> $parameter,
+                "description"=> 'Rent Premium',
+                "invoiceid" => 'NULL',
+                'amount'=> $premium,
+                "invoicecode" => 'NULL',
+            ]
+            ];
+        }
+
+
+
 
         $responsedata = [];
 

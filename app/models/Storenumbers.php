@@ -78,6 +78,14 @@ class Storenumbers extends tableDataObject
     }
 
 
+    public static  function getStoreCountByShopNumber($storenumber){
+        global $connectedDb;
+        $getrecords = "SELECT count(*) as ct   from storenumbers  where  shopnumber  = '$storenumber' ";
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->fetchColumn();
+    }
+
+
 
 
 }

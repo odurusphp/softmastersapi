@@ -26,9 +26,13 @@ class Pay extends PostController
         $payeetelephone = isset($_POST['payeetelephone']) ? $_POST['payeetelephone'] : '';
         $payment_type = isset($_POST['payment_type']) ? $_POST['payment_type'] : '';
 
-        $invcount = Invoices::getInvoiceCodeCount($invoiceid);
-        if($invcount  == 0){
-            $rs->throwErrror('INV_404', 'Invoice ID does not exist', 'Invoice ID');
+//        $invcount = Invoices::getInvoiceCodeCount($invoiceid);
+//        if($invcount  == 0){
+//            $rs->throwErrror('INV_404', 'Invoice ID does not exist', 'Invoice ID');
+//        }
+
+        if($invoiceid == '' ||  $invoiceid == null ) {
+            $invoiceid = 'NULL';
         }
 
         $postfields = (array_keys($_POST));
