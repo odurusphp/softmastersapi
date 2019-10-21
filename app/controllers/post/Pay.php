@@ -22,7 +22,7 @@ class Pay extends PostController
         $transactioncode = isset($_POST['transactioncode']) ? $_POST['transactioncode'] : '';
         $telephone = isset($_POST['telephone']) ? $_POST['telephone'] : '';
         $storenumber = isset($_POST['storenumber']) ? $_POST['storenumber'] : '';
-        $payeename = isset($_POST['payesname']) ? $_POST['payeename'] : '';
+        $payeename = isset($_POST['payeename']) ? $_POST['payeename'] : '';
         $payeetelephone = isset($_POST['payeetelephone']) ? $_POST['payeetelephone'] : '';
         $payment_type = isset($_POST['payment_type']) ? $_POST['payment_type'] : '';
 
