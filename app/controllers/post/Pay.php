@@ -95,9 +95,10 @@ class Pay extends PostController
         //Verifying Token
         $rs->verifyToken($token);
 
+        $reverseamount = -1 * $amount;
         $py  = new Payments();
         $py->recordObject->invoiceid = null;
-        $py->recordObject->amount = $amount;
+        $py->recordObject->amount = $reverseamount;
         $py->recordObject->telephone = $telephone;
         $py->recordObject->transactioncode = $transactioncode;
         $py->recordObject->paymentdate = $reversaldate;
