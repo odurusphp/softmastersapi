@@ -49,6 +49,16 @@ class Pay extends PostController
         //Verifying Token
         $rs->verifyToken($token);
 
+
+        //Store Number Analysis
+
+        $storedata = Storenumbers::getStoreDetailsbyStoreNumber($storenumber);
+        $storetype = isset($storedata->storetype) ? $storedata->storetype : null;
+        $cid = isset($storedata->cid) ? $storedata->cid : null;
+        $location = isset($storedata->location) ? $storedata->location : null;
+
+
+
         $invdata  = Invoices::getInvoicebyCode($invoiceid);
         $invid  = isset($invdata->invoiceid) ? $invdata->invoiceid : null;
 
@@ -66,8 +76,35 @@ class Pay extends PostController
         $py->recordObject->payeename = $payeename;
 
         if($py->store()){
+            if($storetype != null){
+                $this->updatetenants($storetype,$storenumber,$cid, $location);
+            }
+
             $data =  ['message'=> 'Payment Data Received'];
             $rs->returnResponse($data);
+        }
+
+    }
+
+
+    public function updatetenants($storetype, $storenumber, $cid, $location){
+
+        $rates = Rates::getratebyStoreType($storetype);
+        $premiumrent = isset($rates->premiumrent) ? $rates->premiumrent : '' ;
+        $rent = isset($rates->rent) ? $rates->rent : '' ;
+        $amount = premiumCalculation($premiumrent);
+        $amountpaid = PaymentData::getTotalPaymentbyStore($storenumber);
+
+        $paypercent = $amount == 0  ? 0 :  ( $amountpaid / $amount ) * 100;
+        $count = Tenants::tenantCount($storenumber);
+        if($count == 0) {
+            if ($paypercent >= 20) {
+                $ten = new Tenants();
+                $ten->recordObject->storenumber = $storenumber;
+                $ten->recordObject->cid = $cid;
+                $ten->recordObject->location = $location;
+                $ten->store();
+            }
         }
 
     }
