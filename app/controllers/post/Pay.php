@@ -74,6 +74,7 @@ class Pay extends PostController
         $py->recordObject->status = 10;
         $py->recordObject->payeetelephone = $payeetelephone;
         $py->recordObject->payeename = $payeename;
+        $py->recordObject->location = $location;
 
         if($py->store()){
             if($storetype != null){
