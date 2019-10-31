@@ -22,7 +22,7 @@ class Customers extends Controller
 
 
 
-        $usercount = Customer::getcustomerscountbyTelephone($telephone);
+        $usercount = Customers::getcustomerscountbyTelephone($telephone);
         if($usercount == 0){
             $rs->throwErrror('TEL_102', 'Telephone number doesnot exist', 'Telephone');
         }
@@ -37,7 +37,7 @@ class Customers extends Controller
         $rs->verifyToken($token);
 
         //Get applicant details
-        $customerdata  = Customer::getcustomersbyTelephone($telephone);
+        $customerdata  = Customers::getcustomersbyTelephone($telephone);
         $staffid  = $customerdata->staffid;
         $cid = $customerdata->cid;
         $firstname = $customerdata->firstname;
@@ -56,7 +56,7 @@ class Customers extends Controller
         //$natureoftrade = $customerdata->natureoftrade;
          $ownershiptype = $customerdata->occupancy;
 
-         $st =  Customer::getallocatedCustomers($cid);
+         $st =  Customers::getallocatedCustomers($cid);
          $shopnumber = isset($st->shopnumber) ? $st->shopnumber : '';
          $natureoftrade = isset($st->natureoftrade) ? $st->natureoftrade : '';
 
@@ -88,8 +88,7 @@ class Customers extends Controller
          $locationdata = ['latitude'=>$latitude, 'longitude'=>$longitude, 'city'=>$city, 'region'=>$region,
                           'streetnumber'=>$streetnumber, 'popularname'=>$popularname,
                           'housenumber'=>$housenumber];
-
-
+        
           //Ducuments and Images
          $siteroot = 'http://kma.ucomgh.com';
          $passport = $siteroot.'/uploads/storeimages/'.$staffid. '.jpeg';
@@ -150,14 +149,9 @@ class Customers extends Controller
                         'invoiceamount'=>$invoiceamount, 'invoicecode'=>$invoicecode, 'invoicedate'=>$invoicedate,
                          'amountpaid'=>$amountpaid
                         ];
-
-
         }
 
         $rs->returnResponse($data);
-
-
-
 
     }
 

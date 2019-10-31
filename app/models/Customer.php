@@ -383,6 +383,14 @@ class Customer extends tableDataObject{
 
     }
 
+    public static function searchtransport($parameter){
+        global $connectedDb;
+        $getrecords = "SELECT * FROM customers WHERE regtype = 'transportation' AND 
+                        (vehiclenumber LIKE  '$parameter%' OR telephone LIKE '$parameter%' ";
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->resultSet();
+    }
+
 
 
 
