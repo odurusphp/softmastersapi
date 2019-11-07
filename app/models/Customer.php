@@ -393,8 +393,6 @@ class Customer extends tableDataObject{
     }
 
 
-
-
 }
 
 ?>
