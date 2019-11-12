@@ -20,20 +20,9 @@ Placeholder
 
 PHP
 
-## Contributing
-
-Placeholder
-
-## Versioning
-
-Placeholder
-
 ## Authors
 - Prince Oduro / prince@getinnotized.com
 
-## License
-
-Placeholder
 
 ## Acknowledgments
 
