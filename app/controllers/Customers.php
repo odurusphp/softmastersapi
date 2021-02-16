@@ -20,8 +20,6 @@ class Customers extends Controller
             $rs->throwErrror('TEL_101', 'Telephone', 'Telephone');
         }
 
-
-
         $usercount = Customers::getcustomerscountbyTelephone($telephone);
         if($usercount == 0){
             $rs->throwErrror('TEL_102', 'Telephone number doesnot exist', 'Telephone');

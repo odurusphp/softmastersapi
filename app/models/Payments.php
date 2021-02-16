@@ -26,6 +26,22 @@ class Payments extends tableDataObject
         return $connectedDb->fetchColumn();
     }
 
+    public static  function getpaymentByCidandDescription($cid, $description){
+        global $connectedDb;
+        $getrecords = "SELECT  sum(amount) as amt  FROM  payments  WHERE cid = $cid and description = '$description' ";
+        $connectedDb->prepare($getrecords);
+        $connectedDb->execute();
+        return $connectedDb->fetchColumn();
+    }
+
+    public static  function getpaymentByStoreandDescription($storenumber, $description){
+        global $connectedDb;
+        $getrecords = "SELECT  sum(amount) as amt  FROM  payments  WHERE storenumber = '$storenumber' and description = '$description' ";
+        $connectedDb->prepare($getrecords);
+        $connectedDb->execute();
+        return $connectedDb->fetchColumn();
+    }
+
 
 
 

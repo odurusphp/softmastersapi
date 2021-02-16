@@ -14,9 +14,10 @@ class Pay extends PostController
         $rs = new RestApi();
 
         $requiredfieldnames = ['telephone', 'invoiceid', 'amount', 'transactioncode',
-                                'paymentdate', 'storenumber', 'payeename', 'payeetelephone', 'payment_type'];
+                               'paymentdate',  'payeename', 'payeetelephone', 'payment_type',
+                               'entity', 'customerid'];
 
-        $paymentdate= isset($_POST['paymentdate']) ? $_POST['paymentdate'] : '';
+        $paymentdate = isset($_POST['paymentdate']) ? $_POST['paymentdate'] : '';
         $invoiceid = isset($_POST['invoiceid']) ? $_POST['invoiceid'] : '';
         $amount = isset($_POST['amount']) ? $_POST['amount'] : '';
         $transactioncode = isset($_POST['transactioncode']) ? $_POST['transactioncode'] : '';
@@ -25,11 +26,8 @@ class Pay extends PostController
         $payeename = isset($_POST['payeename']) ? $_POST['payeename'] : '';
         $payeetelephone = isset($_POST['payeetelephone']) ? $_POST['payeetelephone'] : '';
         $payment_type = isset($_POST['payment_type']) ? $_POST['payment_type'] : '';
-
-//        $invcount = Invoices::getInvoiceCodeCount($invoiceid);
-//        if($invcount  == 0){
-//            $rs->throwErrror('INV_404', 'Invoice ID does not exist', 'Invoice ID');
-//        }
+        $entity = isset($_POST['entity']) ? $_POST['entity'] : '';
+        $customerid = isset($_POST['customerid']) ? $_POST['customerid'] : '';
 
         if($invoiceid == '' ||  $invoiceid == null ) {
             $invoiceid = 'NULL';
@@ -75,14 +73,16 @@ class Pay extends PostController
         $py->recordObject->payeetelephone = $payeetelephone;
         $py->recordObject->payeename = $payeename;
         $py->recordObject->location = $location;
-        $py->recordObject->bank  = 'Fidelity Bank';
+        $py->recordObject->bank  = $entity;
+        $py->recordObject->cid = $customerid;
 
         if($py->store()){
             if($storetype != null){
                 $this->updatetenants($storetype,$storenumber,$cid, $location);
             }
 
-            $data =  ['message'=> 'Payment Data Received'];
+            $data =  ['message'=> 'Payment Data Received', 'transactioncode'=>$transactioncode,
+                      'customerid'=>$customerid];
             $rs->returnResponse($data);
         }
 
@@ -114,12 +114,14 @@ class Pay extends PostController
     public function reversal(){
 
         $rs = new RestApi();
-        $requiredfieldnames = ['telephone', 'amount', 'transactioncode', 'reversaldate', 'storenumber'];
+        $requiredfieldnames = ['telephone', 'amount', 'transactioncode', 'reversaldate', 'entity', 'customerid'];
         $reversaldate  = isset($_POST['reversaldate']) ? $_POST['reversaldate'] : '';
         $amount = isset($_POST['amount']) ? $_POST['amount'] : '';
         $transactioncode = isset($_POST['transactioncode']) ? $_POST['transactioncode'] : '';
         $telephone = isset($_POST['telephone']) ? $_POST['telephone'] : '';
         $storenumber = isset($_POST['storenumber']) ? $_POST['storenumber'] : '';
+        $entity = isset($_POST['entity']) ? $_POST['entity'] : '';
+        $customerid = isset($_POST['customerid']) ? $_POST['customerid'] : '';
         $postfields = (array_keys($_POST));
 
         //Validating the fieldnames in the method
@@ -143,7 +145,9 @@ class Pay extends PostController
         $py->recordObject->paymentdate = $reversaldate;
         $py->recordObject->storenumber = $storenumber;
         $py->recordObject->description = 'Reversal';
+        $py->recordObject->bank = $entity;
         $py->recordObject->status = 10;
+        $py->recordObject->cid = $customerid;
 
         if($py->store()){
             $data =  ['message'=> 'Reversal xuccessfully done'];
@@ -163,6 +167,7 @@ class Pay extends PostController
         $telephone = isset($_POST['telephone']) ? $_POST['telephone'] : '';
         $currency = isset($_POST['currency']) ? $_POST['currency'] : '';
         $userid  = isset($_POST['userid']) ? $_POST['userid'] : '';
+
         $postfields = (array_keys($_POST));
 
         //Validating the fieldnames in the method
@@ -185,6 +190,7 @@ class Pay extends PostController
         $py->recordObject->currency = $currency;
         $py->recordObject->dateprocessed = date('Y-m-d H:i:s');
         $py->recordObject->userid = $userid;
+
 
         if($py->store()){
             $vid = $py->recordObject->vid;

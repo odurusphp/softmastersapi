@@ -68,6 +68,14 @@ class Invoices extends tableDataObject{
         $getrecords = "SELECT * from invoices where invoicecode = '$invoicecode' ";
         $connectedDb->prepare($getrecords);
         return $connectedDb->singleRecord();
+    }
+
+    public static  function getInvoiceDetailsByCid($cid)
+    {
+        global $connectedDb;
+        $getrecords = "SELECT * from invoices where cid = $cid ";
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->resultSet();
 
     }
 
@@ -92,6 +100,21 @@ class Invoices extends tableDataObject{
     {
         global $connectedDb;
         $getrecords = "SELECT  sum(amount) as amt  from payments where storenumber = '$storenumber' ";
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->fetchColumn();
+    }
+
+    public static  function getInvoiceByServiceType($cid, $description){
+        global  $connectedDb;
+
+        $getrecords = "SELECT sum(amount) as  amount from invoices where cid = $cid and description = '$description' ";
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->fetchColumn();
+    }
+
+    public static  function getInvoiceByServiceTypeandShopNumber($storenumber, $description){
+        global  $connectedDb;
+        $getrecords = "SELECT sum(amount) as  amount from invoices where storenumber = '$storenumber' and description = '$description' ";
         $connectedDb->prepare($getrecords);
         return $connectedDb->fetchColumn();
     }

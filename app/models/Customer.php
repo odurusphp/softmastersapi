@@ -9,7 +9,6 @@ class Customer extends tableDataObject{
         global $connectedDb;
         $getrecords = "SELECT  *  FROM customers WHERE telephone like '%$telephone%'  ";
         $connectedDb->prepare($getrecords);
-        $connectedDb->execute();
         return $connectedDb->singleRecord();
     }
 
@@ -17,7 +16,6 @@ class Customer extends tableDataObject{
         global $connectedDb;
         $getrecords = "SELECT telephone  FROM customers WHERE storenumber like '%$storenumber%'  ";
         $connectedDb->prepare($getrecords);
-        $connectedDb->execute();
         return $connectedDb->fetchColumn();
     }
 
@@ -25,7 +23,6 @@ class Customer extends tableDataObject{
         global $connectedDb;
         $getrecords = "SELECT count(*) as CT  FROM customers WHERE telephone = '$telephone'   ";
         $connectedDb->prepare($getrecords);
-        $connectedDb->execute();
         return $connectedDb->fetchColumn();
     }
 

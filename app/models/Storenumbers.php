@@ -27,6 +27,14 @@ class Storenumbers extends tableDataObject
         return $connectedDb->singleRecord();
     }
 
+    public static  function getAllStoreDetailsbyStoreNumber($stnumber){
+        global $connectedDb;
+        $getrecords = "Select * from storenumbers where  shopnumber = '$stnumber' ";
+        $connectedDb->prepare($getrecords);
+        $connectedDb->execute();
+        return $connectedDb->resultSet();
+    }
+
 
     public static  function getStorebyNatureoftrade($trade){
         global $connectedDb;
@@ -65,6 +73,13 @@ class Storenumbers extends tableDataObject
         $getrecords = "SELECT * from storenumbers  where  cid = $cid ";
         $connectedDb->prepare($getrecords);
         return $connectedDb->resultSet();
+    }
+
+    public static  function getCustomerStoresCount($cid){
+        global $connectedDb;
+        $getrecords = "SELECT count(*) from storenumbers  where  cid = $cid ";
+        $connectedDb->prepare($getrecords);
+        return $connectedDb->fetchColumn();
     }
 
     public static  function searhallocated($page, $limit){
