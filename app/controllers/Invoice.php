@@ -137,20 +137,23 @@ class Invoice extends Controller
                 $premium = Invoices:: getInvoiceByServiceTypeandShopNumber($storenumber, 'Store Allocation');
                 $servicecharge = Invoices::getInvoiceByServiceTypeandShopNumber($storenumber, 'Service Charge');
                 $setupfee = Invoices::getInvoiceByServiceTypeandShopNumber($storenumber, 'Set-Up Fee');
+                $rentfee = Invoices::getInvoiceByServiceTypeandShopNumber($storenumber, 'Rent');
 
                 //Get All Payments
                 $premiumpayments = Payments::getpaymentByStoreandDescription($storenumber, 'Premium');
                 $servicechargepaymnets  = Payments::getpaymentByStoreandDescription($storenumber, 'Service Charge');
                 $setupfeepayment =  Payments::getpaymentByStoreandDescription($storenumber, 'Set-Up Fee');
+                $rentpayment = Payments::getpaymentByStoreandDescription($storenumber, 'Rent');
 
                 //Amount Oustanding
                 $premiumoutstanding  = $premium - $premiumpayments;
                 $serviceoutstanding = $servicecharge - $servicechargepaymnets;
                 $setupoustanding  = $setupfee - $setupfeepayment;
+                $rentoustanding  = $rentfee - $rentpayment;
                 //$paymentsdata[] = ['premium'=>$premiumoutstanding, 'setupfee'=>$setupoustanding, 'servicecharge'=>$serviceoutstanding];
 
                 $stores[] = ['storenumber'=>$storenumber, 'storetype'=>$storetype, 'floor'=>$floor,
-                             'premium_payable'=>$premiumoutstanding,
+                             'premium_payable'=>$premiumoutstanding,  'rent_payable'=>$rentoustanding,
                              'setupfee_payable'=>$setupoustanding, 'servicecharge_payable'=>$serviceoutstanding];
             }
         }else{;
@@ -231,22 +234,24 @@ class Invoice extends Controller
                 $premium = Invoices:: getInvoiceByServiceTypeandShopNumber($storenumber, 'Store Allocation');
                 $servicecharge = Invoices::getInvoiceByServiceTypeandShopNumber($storenumber, 'Service Charge');
                 $setupfee = Invoices::getInvoiceByServiceTypeandShopNumber($storenumber, 'Set-Up Fee');
+                $rentfee = Invoices::getInvoiceByServiceTypeandShopNumber($storenumber, 'Rent');
 
                 //Get All Payments
                 $premiumpayments = Payments::getpaymentByStoreandDescription($storenumber, 'Premium');
                 $servicechargepaymnets  = Payments::getpaymentByStoreandDescription($storenumber, 'Service Charge');
                 $setupfeepayment =  Payments::getpaymentByStoreandDescription($storenumber, 'Set-Up Fee');
+                $rentpayment = Payments::getpaymentByStoreandDescription($storenumber, 'Rent');
 
                 //Amount Oustanding
                 $premiumoutstanding  = $premium - $premiumpayments;
                 $serviceoutstanding = $servicecharge - $servicechargepaymnets;
                 $setupoustanding  = $setupfee - $setupfeepayment;
-                //$paymentsdata[] = ['premium'=>$premiumoutstanding, 'setupfee'=>$setupoustanding, 'servicecharge'=>$serviceoutstanding];
+                $rentoustanding  = $rentfee - $rentpayment;
 
                 $stores[] = ['storenumber'=>$storenumber, 'storetype'=>$storetype, 'floor'=>$floor,
-                    'premium_payable'=>$premiumoutstanding,
+                    'premium_payable'=>$premiumoutstanding,  'rent_payable'=>$rentoustanding,
                     'setupfee_payable'=>$setupoustanding, 'servicecharge_payable'=>$serviceoutstanding];
-            }
+               }
         }else{;
             $stores = [];
             //$paymentsdata = [];
