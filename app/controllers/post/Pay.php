@@ -36,10 +36,10 @@ class Pay extends PostController
         $postfields = (array_keys($_POST));
 
         //Validating the fieldnames in the method
-        $rs->validateFieldNames($requiredfieldnames, $postfields);
+        //$rs->validateFieldNames($requiredfieldnames, $postfields);
 
         // Verify Apikey
-        $apikey = $rs->getApikey();
+        $rs->getApikey();
 
         //Getting Authorization token
         $token = $rs->getBearerToken();
